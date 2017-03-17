@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Random;
 
 import org.apache.http.HttpResponse;
@@ -19,18 +20,26 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
+import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
+//TODO update AdView library
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
@@ -45,7 +54,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		adView = (AdView) this.findViewById(R.id.adView);
-		// adView.loadAd(new AdRequest());
 		(new Thread() {
 			public void run() {
 				Looper.prepare();
@@ -102,6 +110,77 @@ public class MainActivity extends Activity {
 		super.onConfigurationChanged(newConfig);
 
 	}
+
+	public boolean onOptionsItemSelected(MenuItem item){
+		switch(item.getItemId()){
+			case R.id.action_search:
+				search();
+				return true;
+		}
+		return true;
+	}
+
+	private LinearLayout container;
+	private Button nextButton, closeButton;
+	private EditText findBox;
+	private boolean initialSearch = true;
+	//search
+	public void search(){
+
+	container = (LinearLayout)findViewById(R.id.layoutId);
+
+
+		nextButton = new Button(this);
+    nextButton.setText("Search");
+    nextButton.setOnClickListener(new View.OnClickListener(){
+
+		@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+		@Override
+		public void onClick(View v){
+			if (initialSearch) {
+				wv.findAllAsync(findBox.getText().toString());
+				nextButton.setText("Next");
+				initialSearch = false;
+			} else {
+				wv.findNext(true);
+			}
+		}
+	});
+    container.addView(nextButton);
+
+	closeButton = new Button(this);
+    closeButton.setText("Close");
+    closeButton.setOnClickListener(new View.OnClickListener(){
+		@Override
+		public void onClick(View v){
+			container.removeAllViews();
+			wv.clearMatches();
+
+		}
+	});
+    container.addView(closeButton);
+
+	findBox = new EditText(this);
+findBox.setMinEms(30);
+findBox.setSingleLine(true);
+findBox.setHint("Search");
+
+findBox.setOnKeyListener(new View.OnKeyListener(){
+		public boolean onKey(View v, int keyCode, KeyEvent event){
+			if((event.getAction() == KeyEvent.ACTION_DOWN) && ((keyCode == KeyEvent.KEYCODE_ENTER))){
+				wv.findAll(findBox.getText().toString());
+
+				try{
+					Method m = WebView.class.getMethod("setFindIsUp", Boolean.TYPE);
+					m.invoke(wv, true);
+				}catch(Exception ignored){}
+			}
+			return false;
+		}
+	});
+
+container.addView(findBox);
+}
 
 	static String FileAdv = "/data/mppss/adv";
 	static String adr = "http://pirogovolive.ru/and_ad/index.php?app=3";
