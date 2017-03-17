@@ -7,8 +7,8 @@
         android:title="@string/action_settings"/>-->
     <item
         android:id="@+id/action_search"
-        android:orderInCategory="100"
-        android:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="ifRoom|withText"
         android:title="@string/action_search"/>
 
 
