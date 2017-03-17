@@ -39,27 +39,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-//TODO update AdView library
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends Activity {
 	WebView wv;
 	String adv_string;
 	private AdView adView;
 	String THIS_FILE="MainActivity";
+	private AdView mAdView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		adView = (AdView) this.findViewById(R.id.adView);
-		(new Thread() {
-			public void run() {
-				Looper.prepare();
-				adView.loadAd(new AdRequest());
-			}
-		}).start();
+
+		mAdView = (AdView) findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
+
 		adv_string = setAdv();
 		wv = (WebView) findViewById(R.id.webView1);
 		wv.setWebViewClient(new WebViewClient() {

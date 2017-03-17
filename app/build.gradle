@@ -21,5 +21,9 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:25.2.0'
-    compile files('libs/GoogleAdMobAdsSdk-6.4.1.jar')
+    compile 'com.google.firebase:firebase-ads:10.0.1'
 }
+
+
+
+apply plugin: 'com.google.gms.google-services'
