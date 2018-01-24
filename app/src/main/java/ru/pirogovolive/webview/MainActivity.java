@@ -43,11 +43,20 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 public class MainActivity extends Activity {
+    static String FileAdv = "/data/mppss/adv";
+    static String adr = "http://pirogovolive.ru/and_ad/index.php?app=3";
     WebView wv;
     String adv_string;
-    private AdView adView;
     String THIS_FILE = "MainActivity";
+    boolean initialSearchMenu = true;
+    String adv_from_file;
+    String[] advert_serv;
+    private AdView adView;
     private AdView mAdView;
+    private LinearLayout container;
+    private Button nextButton, closeButton;
+    private EditText findBox;
+    private boolean initialSearch = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +118,6 @@ public class MainActivity extends Activity {
 
     }
 
-    boolean initialSearchMenu = true;
-
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
@@ -122,11 +129,6 @@ public class MainActivity extends Activity {
         }
         return true;
     }
-
-    private LinearLayout container;
-    private Button nextButton, closeButton;
-    private EditText findBox;
-    private boolean initialSearch = true;
 
     //search
     public void search() {
@@ -185,12 +187,6 @@ public class MainActivity extends Activity {
 
         container.addView(findBox);
     }
-
-    static String FileAdv = "/data/mppss/adv";
-    static String adr = "http://pirogovolive.ru/and_ad/index.php?app=3";
-
-    String adv_from_file;
-    String[] advert_serv;
 
     private String setAdv() {
         // TextView adv = (TextView) namepopuoLayout.findViewById(R.id.textadv);
